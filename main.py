@@ -1,4 +1,5 @@
 from audio_handler import *
 
 
-audio_handler = Audio_Handler()
+path = '/12tet_diatonic_scale.wav'
+audio_handler = Audio_Handler(file_path=path)
