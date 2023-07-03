@@ -28,30 +28,33 @@ class Audio_Handler:
 
 
     def compute_freqs(self, audio_series: np.ndarray, sampling_rate: float, beat_frames: list[int]):
-        beat_sample_indices = ls.frames_to_samples(frames=beat_frames)
+        # beat_sample_indices = ls.frames_to_samples(frames=beat_frames)
         # [print(b) for b in beat_sample_indices]
-        audio_beats = np.asfarray([audio_series[x] for x in beat_sample_indices])
+        # audio_beats = np.asfarray([audio_series[x] for x in beat_sample_indices])
         # [print(a) for a in audio_beats]
         # need to use stft to convert the time series to frequencies
         # returns (freq_magnitude, freq, time)
-        stft = ls.stft(y=audio_beats)  # get the short-time fourier transform
-        for s in stft:
-            print(s)
+        # stft = ls.stft(y=audio_beats)  # get the short-time fourier transform
+        # for s in stft:
+        #     print(s)
 
-
-        # freqs = [ls.hz_to_note(b) for b in audio_beats]
+        # nfft = 256
+        # # returns an array where each value is an array of magnitudes for each freq bin
+        # stft = np.abs(ls.stft(audio_series, n_fft=nfft))
+        # freqs = ls.fft_frequencies(sr=sampling_rate, n_fft=nfft)
+        # for a in stft:
+        #     for b in a:
+        #         print(b)
+        #     break
         # print(freqs)
+        pitches, magnitudes = ls.piptrack(y=audio_series, sr=sampling_rate, fmin=75, fmax=1600)
+        for i, b in enumerate(beat_frames):
+            time = b
+            index = magnitudes[:, time].argmax()
+            pitch = pitches[index, time]
+            note = ls.hz_to_note(pitch)
+            print(note)  # 494hz = A4
 
 
-
-        # onset_strength = onset.onset_strength(y=audio_series, sr=sampling_rate)
-        # correlation = ls.autocorrelate(onset_strength)
-        # fig, axis = plt.subplots()
-        # axis.plot(correlation)
-        # axis.set(title='Auto-correlation', xlabel='Lag (frames)')
-        # plt.show()
-        # for x in audio_series:
-        #     try:
-        #         # note = ls.hz_to_note(x)
-        #         print(x)
-        #     except: pass
+    def get_freq_from_index(self):
+        pass
