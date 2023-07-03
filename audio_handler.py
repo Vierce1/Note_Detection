@@ -5,9 +5,7 @@ import numpy as np
 
 class Audio_Handler:
     def __init__(self, file_path: str):
-        # self.audio_file = open(file_path)
         audio_series, sample_rate = ls.load(path=file_path, mono=True)  # (ndarray, float)
-        # print(self.audio_series)
         self.duration = ls.get_duration(y=audio_series)
         bpm, beat_frames = self.get_bpm(audio_series=audio_series, sampling_array=sample_rate)
         print(f'bpm = {bpm}')
@@ -28,25 +26,6 @@ class Audio_Handler:
 
 
     def compute_freqs(self, audio_series: np.ndarray, sampling_rate: float, beat_frames: list[int]):
-        # beat_sample_indices = ls.frames_to_samples(frames=beat_frames)
-        # [print(b) for b in beat_sample_indices]
-        # audio_beats = np.asfarray([audio_series[x] for x in beat_sample_indices])
-        # [print(a) for a in audio_beats]
-        # need to use stft to convert the time series to frequencies
-        # returns (freq_magnitude, freq, time)
-        # stft = ls.stft(y=audio_beats)  # get the short-time fourier transform
-        # for s in stft:
-        #     print(s)
-
-        # nfft = 256
-        # # returns an array where each value is an array of magnitudes for each freq bin
-        # stft = np.abs(ls.stft(audio_series, n_fft=nfft))
-        # freqs = ls.fft_frequencies(sr=sampling_rate, n_fft=nfft)
-        # for a in stft:
-        #     for b in a:
-        #         print(b)
-        #     break
-        # print(freqs)
         pitches, magnitudes = ls.piptrack(y=audio_series, sr=sampling_rate, fmin=75, fmax=1600)
         for i, b in enumerate(beat_frames):
             time = b
@@ -56,5 +35,5 @@ class Audio_Handler:
             print(note)  # 494hz = A4
 
 
-    def get_freq_from_index(self):
-        pass
+
+
